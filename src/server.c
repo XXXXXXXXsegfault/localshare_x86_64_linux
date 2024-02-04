@@ -536,8 +536,14 @@ void handle_post(void *sock,char *header)
 		{
 			if(stage!=2||size<read_size+4+bound_len)
 			{
-				if(stage==1||stage==2)
+				if(stage==1)
 				{
+					free(real_path);
+				}
+				if(stage==2)
+				{
+					close(fd);
+					unlink(tmp_file);
 					free(real_path);
 				}
 				free(tmp_file);
@@ -547,6 +553,8 @@ void handle_post(void *sock,char *header)
 			i=write(fd,buf+read_size,size-read_size-4-bound_len);
 			if(i!=size-read_size-4-bound_len)
 			{
+				close(fd);
+				unlink(tmp_file);
 				free(real_path);
 				free(tmp_file);
 				send_page_500(sock);
@@ -778,6 +786,7 @@ void handle_post(void *sock,char *header)
 				close(fd);
 				if(i!=ret-4)
 				{
+					unlink(tmp_file);
 					free(real_path);
 					free(tmp_file);
 					send_page_500(sock);

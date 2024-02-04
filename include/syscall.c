@@ -123,6 +123,7 @@ asm "ret"
 #define fchmodat(dirfd,path,mode) syscall(268,dirfd,path,mode,0,0,0)
 #define finit_module(fd,params,flags) syscall(313,fd,params,flags,0,0,0)
 #define getrandom(buf,size,flags) syscall(318,buf,size,flags,0,0,0)
+#define unlink(name) unlinkat(AT_FDCWD,name,0)
 /*
 long int vfork(void);
 asm "@vfork"
@@ -147,7 +148,6 @@ long int waitpid(int pid,int *status,int options)
 #define umount(mpt) umount2(mpt,0)
 #define readlink(name,buf,size) readlinkat(AT_FDCWD,name,buf,size)
 #define chmod(name,mode) fchmodat(AT_FDCWD,name,mode)
-#define unlink(name) unlinkat(AT_FDCWD,name,0)
 #define nice(prio) setpriority(0,gettid(),prio)
 struct timespec
 {
